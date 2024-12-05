@@ -1,0 +1,52 @@
+{
+  "name": "@contentmod/sdk",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "private": false,
+  "description": "SDK To interact with ContentMod",
+  "keywords": [
+    "contentmod",
+    "content moderation"
+  ],
+  "homepage": "https://contentmod.io",
+  "bugs": {
+    "url": "https://github.com/contentmod/sdk/issues"
+  },
+  "author": "Dagur Leo <hello@contentmod.io> (https://contentmod.io)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/contentmod/sdk.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "ci": "bun run build && bun run check-format && bun run check-exports && bun run lint && bun test --timeout 30000",
+    "check-exports": "attw --pack .",
+    "test": "vitest run",
+    "lint": "tsc"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.0",
+    "@types/bun": "latest",
+    "@types/node": "^22.9.0",
+    "prettier": "^3.3.3",
+    "tsup": "^8.3.5",
+    "vitest": "^2.1.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
