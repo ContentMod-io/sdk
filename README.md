@@ -1,15 +1,28 @@
-# js-sdk
+# ContentMod TypeScript SDK
 
-To install dependencies:
+This is the repository for the ContentMod TypeScript SDK.
 
-```bash
-bun install
-```
+Checkout our docs at [https://docs.contentmod.io](https://docs.contentmod.io)
 
-To run:
+## Installation
 
 ```bash
-bun run index.ts
+npm install @contentmod/sdk
 ```
 
-This project was created using `bun init` in bun v1.1.15. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## Usage
+
+```ts
+import { ContentMod } from '@contentmod/sdk';
+
+const contentMod = new ContentMod({
+  secretKey: 'YOUR_SECRET_KEY',
+  publicKey: 'YOUR_PUBLIC_KEY',
+});
+
+const textModerationResponse = await contentMod.text.moderate('Hello world!');
+
+const imageModerationResponse = await contentMod.image.moderate(
+  'https://example.com/image.jpg',
+);
+```
