@@ -14,6 +14,16 @@ export class ContentMod {
     }
   }
 
+  exampleMethod<T extends string | undefined>(
+    param?: T,
+  ): T extends string ? number : boolean {
+    if (param) {
+      return param.length as T extends string ? number : boolean;
+    } else {
+      return true as T extends string ? number : boolean;
+    }
+  }
+
   public text = {
     get: async (id: string): Promise<TextModerationResponse> => {
       const response = await this.performRequest(`/text/${id}`, {
@@ -21,12 +31,19 @@ export class ContentMod {
       });
       return response;
     },
-    moderate: async (
+
+    moderate: async <
+      T extends
+        | { callbackUrl?: string; metadata?: Record<string, any> }
+        | { metadata?: Record<string, any> },
+    >(
       text: string,
-      options?: {
-        meta?: Record<string, any>;
-      },
-    ): Promise<TextModerationResponse> => {
+      options?: T,
+    ): Promise<
+      T extends { callbackUrl: string }
+        ? { id: string }
+        : TextModerationResponse
+    > => {
       const response = await this.performRequest(`/text`, {
         method: 'POST',
         body: {
@@ -34,17 +51,26 @@ export class ContentMod {
           options,
         },
       });
-      return response;
+
+      return response as T extends { callbackUrl: string }
+        ? { id: string }
+        : TextModerationResponse;
     },
   };
 
   public image = {
-    moderate: async (
-      image: string, // Url or base64 encoded image
-      options?: {
-        meta?: Record<string, any>;
-      },
-    ) => {
+    moderate: async <
+      T extends
+        | { callbackUrl?: string; metadata?: Record<string, any> }
+        | { metadata?: Record<string, any> },
+    >(
+      image: string,
+      options?: T,
+    ): Promise<
+      T extends { callbackUrl: string }
+        ? { id: string }
+        : TextModerationResponse
+    > => {
       const response = await this.performRequest(`/image`, {
         method: 'POST',
         body: {
@@ -52,7 +78,9 @@ export class ContentMod {
           options,
         },
       });
-      return response;
+      return response as T extends { callbackUrl: string }
+        ? { id: string }
+        : TextModerationResponse;
     },
   };
 

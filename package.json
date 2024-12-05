@@ -1,6 +1,6 @@
 {
   "name": "@contentmod/sdk",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "private": false,
   "description": "SDK To interact with ContentMod",
@@ -10,12 +10,12 @@
   ],
   "homepage": "https://contentmod.io",
   "bugs": {
-    "url": "https://github.com/contentmod/sdk/issues"
+    "url": "https://github.com/ContentMod-io/sdk/issues"
   },
   "author": "Dagur Leo <hello@contentmod.io> (https://contentmod.io)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/contentmod/sdk.git"
+    "url": "https://github.com/ContentMod-io/sdk.git"
   },
   "license": "MIT",
   "type": "module",

@@ -23,7 +23,8 @@ export type TextModerationResponse = {
     reject: boolean;
     review: boolean;
   };
-  filteredText: string;
+  content: string;
+  filteredContent: string;
   original: string;
   request: {
     requestId: string;
