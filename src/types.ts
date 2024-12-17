@@ -31,4 +31,5 @@ export type TextModerationResponse = {
     timestamp: string;
   };
   meta: Record<string, any>;
+  actorId?: string;
 };

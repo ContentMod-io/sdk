@@ -34,13 +34,18 @@ export class ContentMod {
 
     moderate: async <
       T extends
-        | { callbackUrl?: string; metadata?: Record<string, any> }
-        | { metadata?: Record<string, any> },
+        | {
+            callbackUrl?: string;
+            defer?: boolean;
+            metadata?: Record<string, any>;
+            actorId?: string;
+          }
+        | { metadata?: Record<string, any>; actorId?: string },
     >(
       text: string,
       options?: T,
     ): Promise<
-      T extends { callbackUrl: string }
+      T extends { callbackUrl: string } | { defer: boolean }
         ? { id: string }
         : TextModerationResponse
     > => {
@@ -52,7 +57,7 @@ export class ContentMod {
         },
       });
 
-      return response as T extends { callbackUrl: string }
+      return response as T extends { callbackUrl: string } | { defer: boolean }
         ? { id: string }
         : TextModerationResponse;
     },
@@ -61,13 +66,18 @@ export class ContentMod {
   public image = {
     moderate: async <
       T extends
-        | { callbackUrl?: string; metadata?: Record<string, any> }
-        | { metadata?: Record<string, any> },
+        | {
+            callbackUrl?: string;
+            metadata?: Record<string, any>;
+            actorId?: string;
+            defer?: boolean;
+          }
+        | { metadata?: Record<string, any>; actorId?: string },
     >(
       image: string,
       options?: T,
     ): Promise<
-      T extends { callbackUrl: string }
+      T extends { callbackUrl: string } | { defer: boolean }
         ? { id: string }
         : TextModerationResponse
     > => {
@@ -78,7 +88,7 @@ export class ContentMod {
           options,
         },
       });
-      return response as T extends { callbackUrl: string }
+      return response as T extends { callbackUrl: string } | { defer: boolean }
         ? { id: string }
         : TextModerationResponse;
     },
