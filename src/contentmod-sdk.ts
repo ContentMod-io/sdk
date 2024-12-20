@@ -1,5 +1,12 @@
 import { ContentModSigner } from './signer';
-import type { SignType, TextModerationResponse } from './types';
+import type {
+  QueueItemResponse,
+  SignType,
+  TextModerationResponse,
+  WebhookBody,
+  WebhookData,
+  WebhookEvent,
+} from './types';
 export class ContentMod {
   private secretKey: string;
   private publicKey: string;
@@ -11,16 +18,6 @@ export class ContentMod {
     this.publicKey = params.publicKey;
     if (params.url?.length) {
       this.url = params.url;
-    }
-  }
-
-  exampleMethod<T extends string | undefined>(
-    param?: T,
-  ): T extends string ? number : boolean {
-    if (param) {
-      return param.length as T extends string ? number : boolean;
-    } else {
-      return true as T extends string ? number : boolean;
     }
   }
 
@@ -109,6 +106,55 @@ export class ContentMod {
     });
 
     return signer.generateUrl();
+  }
+
+  public queue(queueId: string) {
+    return {
+      getItem: async (id: string): Promise<QueueItemResponse> => {
+        const response = await this.performRequest(
+          `/queues/${queueId}/items/${id}`,
+          {
+            method: 'GET',
+          },
+        );
+        return response;
+      },
+      addItem: async (params: {
+        type: 'text' | 'image';
+        content: string;
+        metadata?: Record<string, any>;
+        actorId?: string;
+      }): Promise<{
+        id: string;
+        status: 'processing' | 'pending';
+      }> => {
+        const response = await this.performRequest(`/queues/${queueId}`, {
+          method: 'POST',
+          body: params,
+        });
+        return response;
+      },
+    };
+  }
+
+  public parseWebhook(data: WebhookBody<WebhookEvent>) {
+    switch (data.event) {
+      case 'moderation.completed':
+        return {
+          event: data.event,
+          data: data.data as TextModerationResponse,
+        };
+      case 'queue.review.completed':
+        return {
+          event: data.event,
+          data: data.data as QueueItemResponse,
+        };
+      default:
+        return {
+          event: data.event,
+          data: data.data as TextModerationResponse,
+        };
+    }
   }
 
   private async performRequest(
